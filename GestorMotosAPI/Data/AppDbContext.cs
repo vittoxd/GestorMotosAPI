@@ -15,5 +15,10 @@ namespace GestorMotosAPI.Data
         // Aquí le decimos: "Crea una tabla llamada 'Motos' basada en mi modelo 'Moto'".
         public DbSet<Moto> Motos { get; set; }
         public DbSet<Mecanico> Mecanicos { get; set; }
+
+        public DbSet<OrdenTrabajo> OrdenesTrabajo { get; set; }
+        public object Mecanico { get; internal set; }
     }
+
+
 }

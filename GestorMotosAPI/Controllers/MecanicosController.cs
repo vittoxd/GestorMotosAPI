@@ -2,15 +2,16 @@
 using GestorMotosAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace GestorMotosAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MecanicosController :  ControllerBase
+    public class MecanicosController : ControllerBase
     {
         private readonly AppDbContext _context;
         public MecanicosController(AppDbContext context)
-        {  _context = context; }
+        { _context = context; }
         [HttpGet]
         public ActionResult<IEnumerable<Mecanico>> ObtenerMecanicos()
         {
@@ -27,6 +28,39 @@ namespace GestorMotosAPI.Controllers
 
             return Ok($"Mecánico {nuevoMecanico.Nombre} guardado para siempre en la base de datos!");
         }
-    }
+        [HttpDelete("{id}")]
+        public ActionResult BorrarMecanicos(int id)
+        {
+            var mecanico = _context.Mecanicos.Find(id);
+            if (mecanico == null)
+            {
+                return NotFound($"Lo siento, el mecánico con ID {id} no existe.");
+          
+            }
+            _context.Mecanicos.Remove(mecanico);
+            _context.SaveChanges();
+
+            return Ok($"El Mecanico {mecanico.Nombre} ha sido eliminada con éxito.");
+        }
+        [HttpPut("{id}")]
+        public ActionResult Editarmecanico(int id, [FromBody]  Mecanico mecanicoActualizado)
+        {
+            var mecanicoEnDB = _context.Mecanicos.Find(id);
+            if (mecanicoEnDB == null)
+            {
+                return NotFound($"no se encontro mecanico con esa id {id}");
+            }
+            mecanicoEnDB.Especialidad = mecanicoActualizado.Especialidad;
+            mecanicoEnDB.AniosExperiencia = mecanicoActualizado.AniosExperiencia;
+            mecanicoEnDB.Nombre = mecanicoActualizado.Nombre;
+
+            _context.SaveChanges();
+            return Ok("Mecanico actualizado con exito");
+        }       
+        
+
+    }   
 
 }
+
+
