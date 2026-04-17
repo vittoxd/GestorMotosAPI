@@ -12,6 +12,15 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirTodo", policy =>
+    {
+        policy.AllowAnyOrigin()   // Permite peticiones desde cualquier lugar
+              .AllowAnyMethod()   // Permite GET, POST, DELETE, etc.
+              .AllowAnyHeader();  // Permite cualquier tipo de encabezado
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,6 +35,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors("PermitirTodo");
 
 app.MapControllers();
 

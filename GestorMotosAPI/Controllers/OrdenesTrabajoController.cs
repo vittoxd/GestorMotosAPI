@@ -41,5 +41,19 @@ namespace GestorMotosAPI.Controllers
 
             return Ok(lista);
         }
+        [HttpDelete("{id}")]
+        public ActionResult BorrarOrden(int id)
+        {
+            var orden = _context.OrdenesTrabajo.Find(id);
+            if (orden == null)
+            {
+                return NotFound($"La orden de trabajo con ID {id} no existe.");
+            }
+            _context.OrdenesTrabajo.Remove(orden);
+
+            _context.SaveChanges();
+
+            return Ok($"Orden de trabajo {id} eliminada correctamente.");
+        }
     }
 }
