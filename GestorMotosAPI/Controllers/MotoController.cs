@@ -1,6 +1,7 @@
 ﻿using GestorMotosAPI.Data;
 using GestorMotosAPI.Models; // ¡Vital! Le dice al controlador dónde está tu clase Moto
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestorMotosAPI.Controllers
 {
@@ -20,6 +21,19 @@ namespace GestorMotosAPI.Controllers
         {
             // Traemos la lista directamente del SSD
             return Ok(_context.Motos.ToList());
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Moto>> GetMoto(int id)
+        {
+            // Buscamos la moto específica por su ID
+            var moto = await _context.Motos.FindAsync(id);
+
+            if (moto == null)
+            {
+                return NotFound(); // Si no existe, devolvemos un 404
+            }
+
+            return Ok(moto); // Si existe, devolvemos la moto
         }
 
         // 2. El método que responde cuando alguien pide ver las motos
