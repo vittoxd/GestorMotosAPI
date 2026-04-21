@@ -1,21 +1,19 @@
-﻿namespace GestorMotosAPI.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-using System.ComponentModel.DataAnnotations;
-
-public class Moto
+namespace GestorMotosAPI.Models
 {
-    // El 'Id' es como el RUT de la moto, único para cada una.
-    public int Id { get; set; }
+    public class Moto
+    {
+        public int Id { get; set; }
 
-    // 'string' es texto (como 'str' en Python)
-    [Required]
-    [StringLength(50)]
-    public string Marca { get; set; } = string.Empty;
-    public string Modelo { get; set; } = string.Empty;
+        [Required(ErrorMessage = "La marca es obligatoria")]
+        public string Marca { get; set; } = string.Empty;
 
-    // 'int' es un número entero (año y kilometraje no tienen decimales)
-    [Range(1900, 2027, ErrorMessage = "¡Oye! Esa moto es muy vieja o viene del futuro")]
-    public int Año { get; set; }
-    [Range(0, 999999)]
-    public int Kilometraje { get; set; }
+        [Required(ErrorMessage = "El modelo es obligatorio")]
+        public string Modelo { get; set; } = string.Empty;
+
+        public int Año { get; set; }
+
+        public int Kilometraje { get; set; }
+    }
 }

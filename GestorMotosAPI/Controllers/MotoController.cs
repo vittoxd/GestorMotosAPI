@@ -1,88 +1,83 @@
-﻿using GestorMotosAPI.Data;
-using GestorMotosAPI.Models; // ¡Vital! Le dice al controlador dónde está tu clase Moto
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using GestorMotosAPI.Models; // 👈 Para conocer la clase Moto
+using GestorMotosAPI.Data;   // 👈 Para conocer la base de datos
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GestorMotosAPI.Controllers
 {
-    // Esta línea define la URL de internet. Quedará como: tusitio.com/api/Motos
     [Route("api/[controller]")]
     [ApiController]
-    public class MotosController : ControllerBase
+    public class MotoController : ControllerBase
     {
-        // 1. Nuestra "Base de datos" temporal (Una lista de C#)
         private readonly AppDbContext _context;
-        public MotosController(AppDbContext context)
+
+        public MotoController(AppDbContext context)
         {
             _context = context;
         }
+
+        // GET: api/Moto
         [HttpGet]
-        public ActionResult<IEnumerable<Moto>> ObtenerMotos()
+        public async Task<ActionResult<IEnumerable<Moto>>> GetMotos()
         {
-            // Traemos la lista directamente del SSD
-            return Ok(_context.Motos.ToList());
+            return await _context.Motos.ToListAsync();
         }
+
+        // GET: api/Moto/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Moto>> GetMoto(int id)
         {
-            // Buscamos la moto específica por su ID
             var moto = await _context.Motos.FindAsync(id);
-
-            if (moto == null)
-            {
-                return NotFound(); // Si no existe, devolvemos un 404
-            }
-
-            return Ok(moto); // Si existe, devolvemos la moto
+            if (moto == null) return NotFound();
+            return moto;
         }
 
-        // 2. El método que responde cuando alguien pide ver las motos
-        [HttpPost] // Significa "Petición para LEER datos"
-        public ActionResult AgregarMoto([FromBody] Moto nuevaMoto)
-        {
-            // A. Añadimos la moto al archivador en memoria
-            _context.Motos.Add(nuevaMoto);
-
-            // B. ¡CLAVE! Guardamos los cambios físicamente en el taller.db
-            _context.SaveChanges();
-
-            return Ok("¡Moto guardada con éxito en el SSD!");
-        }
-        [HttpDelete("{id}")] // El {id} en la URL indica qué moto queremos borrar
-        public ActionResult BorrarMoto(int id)
-        {
-            // A. Buscamos la moto en la base de datos por su ID
-            var motoParaBorrar = _context.Motos.Find(id);
-
-            // B. Si la moto no existe, avisamos al usuario (Error 404)
-            if (motoParaBorrar == null)
-            {
-                return NotFound($"Lo siento, la moto con ID {id} no existe en el taller.");
-            }
-
-            // C. Si existe, la eliminamos del archivador
-            _context.Motos.Remove(motoParaBorrar);
-
-            // D. ¡IMPORTANTE! Guardamos el cambio en el SSD
-            _context.SaveChanges();
-
-            return Ok($"La moto {motoParaBorrar.Modelo} ha sido eliminada con éxito.");
-        }
+        // PUT: api/Moto/5
         [HttpPut("{id}")]
-        public ActionResult editarmoto (int id , [FromBody] Moto motoActualizada)
+        public async Task<IActionResult> PutMoto(int id, Moto moto)
         {
-            var motoEnDB = _context.Motos.Find(id);
-            if (motoEnDB == null)
+            if (id != moto.Id) return BadRequest();
+
+            _context.Entry(moto).State = EntityState.Modified;
+
+            try
             {
-                return NotFound($"No se encontró una moto con el ID {id}");
+                await _context.SaveChangesAsync();
             }
-            motoEnDB.Marca = motoActualizada.Marca;
-            motoEnDB.Modelo = motoActualizada.Modelo;
-            motoEnDB.Año = motoActualizada.Año;
-            motoEnDB.Kilometraje = motoActualizada.Kilometraje;
-            _context.SaveChanges(); 
-            
-            return Ok("¡Moto actualizada con éxito!");
+            catch (DbUpdateConcurrencyException)
+            {
+                // Aquí usamos Any con Mayúscula y el using System.Linq arriba
+                if (!_context.Motos.Any(e => e.Id == id))
+                {
+                    return NotFound();
+                }
+                throw;
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/Moto
+        [HttpPost]
+        public async Task<ActionResult<Moto>> PostMoto(Moto moto)
+        {
+            _context.Motos.Add(moto);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("GetMoto", new { id = moto.Id }, moto);
+        }
+
+        // DELETE: api/Moto/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMoto(int id)
+        {
+            var moto = await _context.Motos.FindAsync(id);
+            if (moto == null) return NotFound();
+
+            _context.Motos.Remove(moto);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
     }
 }
