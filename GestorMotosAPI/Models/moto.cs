@@ -15,5 +15,7 @@ namespace GestorMotosAPI.Models
         public int Año { get; set; }
 
         public int Kilometraje { get; set; }
+
+        public string RutDueno { get; set; } = string.Empty;
     }
 }

@@ -32,12 +32,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
-app.UseCors("PermitirTodo");
-
 app.MapControllers();
 
 app.Run();

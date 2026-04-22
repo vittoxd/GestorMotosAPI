@@ -1,0 +1,196 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #121212;
+    color: #e0e0e0;
+    padding: 20px;
+}
+
+.contenedor-principal {
+    display: flex;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.panel-formulario {
+    background-color: #1e1e1e;
+    padding: 25px;
+    border-radius: 12px;
+    width: 350px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.panel-inventario {
+    background-color: #1e1e1e;
+    padding: 25px;
+    border-radius: 12px;
+    flex: 1;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+    color: #ffffff;
+    border-bottom: 2px solid #ff6600;
+    padding-bottom:  10px;
+    margin-bottom: 20px;
+}
+
+form div {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #b0b0b0;
+    font-size: 0.9rem;
+}
+
+input[type ="text"],
+input[type = "number"] {
+    padding:  10px;
+    border-radius: 6px;
+    border:  1px solid #444;
+    background-color: #444;
+    color: #ffffff;
+    font-size: 1rem;
+    transition : all 0.3 ease;
+}
+
+input[type="text"]:focus,
+input[type = "number"]:focus {
+    outline: none;
+    border-color:#ff6600 ;
+    box-shadow:  0 0 5px rgba(225, 102, 0, 0.5);
+}
+
+botton[type= "submit"]{
+    width: 100%;
+    padding: 12px;
+    background-color: #ff6600;
+    color:  white;
+    border: none;
+    border-radius: 6px;
+    font-size:  1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3 ease;
+    margin-top: 10px;
+}
+
+button[type = "submit"]:hover{
+    background-color: #e65c00;
+}
+
+table {
+    width: 100%;
+    border-collapse:  collapse;
+    margin-top : 10px   
+}
+
+th,td {
+    padding: 12px;
+    border-bottom: 1px solid #333;
+}
+
+th {
+    background-color: #2a2a2a ;
+    color : #ff6600;
+}
+
+fieldset {
+    border: 2px solid #ff6600;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+legend {
+    padding:  0 10px;
+    color: #f60;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+#formulario_moto button{
+    width: 100%;
+    padding: 12px;
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(225, 102, 0, 0.5);
+}
+
+#formulario_moto button:hover{
+    background-color: #e65c00;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(225, 102, 0, 0.5);
+}
+
+#formulario_moto button:active {
+    transform: translateY(1px);
+}
+
+td {
+    white-space: nowrap;
+}
+
+.panel-inventario{
+    overflow-x: auto;
+}
+
+.btn-accion {
+    padding: 6px 10px;
+    border-radius:  8px;
+    border: none;
+    cursor: pointer;
+    font-size:  1.1rem;
+    transition: all 0.3 ease;
+    margin-right:  5px;
+}
+
+.btn-editar {
+    background-color: #008ea8;
+    color: white;
+    box-shadow: 0 0 5px rgba(0, 168, 232, 0.3);
+}
+
+.btn-editar:hover {
+    background-color: #007ea7;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(0, 168, 232 , 0.6);
+}
+
+.btn-eliminar {
+    background-color: #ff4d4d;
+    color: white;
+    box-shadow:  0 0 5px rgba(255, 77, 77, 0.3);
+}
+
+.btn-eliminar:hover{
+    background-color: #cc0000;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.6);
+}
+
+legend {
+    text-align: center;      
+    float: none;            
+    margin: 0 auto;         
+    padding: 0 15px;         
+    font-size: 1.2rem;       
+}
