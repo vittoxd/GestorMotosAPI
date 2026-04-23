@@ -1,4 +1,5 @@
-const URL_API =  "/api/Moto";
+const URL_API = "/api/Moto";
+
 
 async function cargarMotos() {
     try {
@@ -212,3 +213,17 @@ inputBusqueda.addEventListener('input', function() {
         }
     }
 });
+
+function mostrarSeccion(idSeccion, boton) {
+    document.querySelectorAll('.seccion-app').forEach(sec => {
+        sec.style.display = 'none';
+    });
+
+    document.getElementById(idSeccion).style.display = 'flex';
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    boton.classList.add('active');
+}

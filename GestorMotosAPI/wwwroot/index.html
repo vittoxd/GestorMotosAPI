@@ -7,69 +7,75 @@
     <link rel="stylesheet" href="Estilo.css">
 </head>
 <body>
+    <nav class="navbar">
+        <button onclick="mostrarSeccion('seccion-motos', this)" class="nav-btn active">Motos 🏍️</button>
+        <button onclick="mostrarSeccion('seccion-mecanicos', this)" class="nav-btn">Personal 🔧</button>
+    </nav>
+
     <main class="contenedor-principal">
-    
-    <div id="notificacion" style="padding: 10px; margin-bottom: 10px; display: none; border-radius: 5px;"></div>
+        <div id="notificacion" style="display: none;"></div>
 
-    <section id="seccion-registro" class="panel-formulario">
-        <form id="formulario_moto">
-            <fieldset>
-                <legend><strong> Registro de Entrada  </strong></legend>
-                
-                <div>
-                    <label>Marca:</label>
-                    <input type="hidden" id="input-id">
-                    <input type="text" id="input-marca" placeholder="Ej: Honda" required>
-                </div>
-                <div>
-                    <label>Modelo:</label>
-                    <input type="text" id="input-modelo" placeholder="Ej: CB500X" required>
-                </div>
-                <div>
-                    <label>Año:</label>
-                    <input type="number" id="input-anio" min="1900" max="2027" placeholder="2024" required>
-                </div>
-                <div>
-                    <label>Kilometraje:</label>
-                    <input type="number" id="input-kilometraje" min="0" placeholder="Km actuales" required>
-                </div>
+        <div id="seccion-motos" class="seccion-app">
+            <section class="panel-formulario">
+                <form id="formulario_moto">
+                    <fieldset>
+                        <legend><strong> Registro de Entrada 🏍️ </strong></legend>
+                        <div>
+                            <label>Marca:</label>
+                            <input type="hidden" id="input-id">
+                            <input type="text" id="input-marca" placeholder="Ej: Honda" required>
+                        </div>
+                        <div>
+                            <label>Modelo:</label>
+                            <input type="text" id="input-modelo" placeholder="Ej: CB500X" required>
+                        </div>
+                        <div>
+                            <label>Año:</label>
+                            <input type="number" id="input-anio" placeholder="2024" required>
+                        </div>
+                        <div>
+                            <label>Kilometraje:</label>
+                            <input type="number" id="input-kilometraje" placeholder="Km" required>
+                        </div>
+                        <label>RUT dueño:</label>
+                        <input type="text" id="input-rut" placeholder="12.345.687-9" required>
+                        <button type="submit" style="margin-top:15px;">REGISTRAR MOTO 🚀</button>
+                    </fieldset>
+                </form>
+            </section>
 
-                <label> RUT dueño:</label>
-                <input type="text" id = "input-rut" placeholder="12.345.687-9" required>
-
-                <div style="margin-top: 10px;">
-                    <button type="submit">Registrar Moto en Sistema 🏍️💨</button>
-                </div>
-                
-            </fieldset>
-        </form>
-    </section>
-
-    <br> <section id="seccion-listado" class="panel-inventario">
-        <h2> Inventario de Motos</h2>
-        
-        <div id="busqueda-container" style="margin-top: 15px; margin-bottom: 15px;">
-            <label>🔍 Filtrar:</label>
-            <input type="text" id="input-busqueda" placeholder="Buscar por marca o modelo...">
+            <section class="panel-inventario">
+                <h2>Inventario de Motos</h2>
+                <input type="text" id="input-busqueda" placeholder="Buscar por marca...">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>RUT</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Año</th>
+                            <th>Km</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-tabla"></tbody>
+                </table>
+            </section>
         </div>
 
-        <table border="1" style="width: 100%; text-align: left;">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>RUT dueño</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Año</th>
-                    <th>Kilometraje</th>
-                    <th>Acciones</th> 
-                </tr>
-            </thead>
-            <tbody id="cuerpo-tabla"></tbody>
-        </table>
-    </section>
-</main>
+        <!-- ✅ CORRECCIÓN: el contenido está DENTRO de seccion-mecanicos -->
+        <div id="seccion-mecanicos" class="seccion-app" style="display: none;">
+            <section class="panel-inventario">
+                <h2>Gestión de Personal 🔧</h2>
+                <p style="color: #aaa; text-align: center;">
+                    Aquí pronto registraremos a los mecánicos de tu taller.
+                </p>
+            </section>
+        </div>
 
-<script src="app.js"></script>
+    </main>
+
+    <script src="app.js"></script>
 </body>
 </html>
