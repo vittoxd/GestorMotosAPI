@@ -50,9 +50,10 @@ namespace GestorMotosAPI.Controllers
             {
                 return NotFound($"no se encontro mecanico con esa id {id}");
             }
-            mecanicoEnDB.Especialidad = mecanicoActualizado.Especialidad;
-            mecanicoEnDB.AniosExperiencia = mecanicoActualizado.AniosExperiencia;
+            mecanicoEnDB.Rut = mecanicoActualizado.Rut;
             mecanicoEnDB.Nombre = mecanicoActualizado.Nombre;
+            mecanicoEnDB.Especialidad = mecanicoActualizado.Especialidad;
+            mecanicoEnDB.Telefono = mecanicoActualizado.Telefono;
 
             _context.SaveChanges();
             return Ok("Mecanico actualizado con exito");

@@ -63,18 +63,66 @@
                 </table>
             </section>
         </div>
-
-        <!-- ✅ CORRECCIÓN: el contenido está DENTRO de seccion-mecanicos -->
         <div id="seccion-mecanicos" class="seccion-app" style="display: none;">
-            <section class="panel-inventario">
-                <h2>Gestión de Personal 🔧</h2>
-                <p style="color: #aaa; text-align: center;">
-                    Aquí pronto registraremos a los mecánicos de tu taller.
-                </p>
+            <section class="panel-formulario">
+                <form id="formulario_personal">
+                    <fieldset>
+                        <legend><strong> Registro De Personal </strong> </legend>
+                        <div>
+                            <label>Rut:</label>
+                            <input type="hidden" id="input-id-mecanico">
+                            <input type="text" id="input-rut-mecanico" placeholder="Ej:12.345.678-9" required>
+                        </div>
+                        <div>
+                            <label> Nombre Completo:</label>
+                            <input type="text" id="input-nombre-mecanico" placeholder="Ej: Juan Mecanico" required>
+                        </div>
+                        <div>
+                            <label>Especialidad:</label>
+                            <select id="select-especialidad" style="width: 100%; padding: 10px; background-color: #333; color: white; border: 1px solid #444; border-radius: 4px; margin-top: 5px; font-family: inherit; font-size: 16px;" required>
+                                <option value="">Seleccione una especialidad...</option>
+                                <option value="Mecanico General">Mecanico General</option>
+                                <option value="Electricista">Electricidad Automotriz</option>
+                                <option value="Desabolladura y Pintura">Desabolladura y Pintura</option>
+                                <option value="Mantencion Rapida">Mantención Rápida</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Teléfono</label>
+                            <input type="text" id="input-telefono-mecanico" placeholder="Ej: +56 9 1234 5678" required>
+                        </div>
+                        <div>
+                            <button type="button" style="margin-top: 15px; background-color: #ff6600; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; text-transform: uppercase;">
+                                REGISTRAR TRABAJADOR!
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
             </section>
+            <section class="panel-inventario">
+                <h2> Plantilla de Mecanico</h2>
+                <div style="margin-bottom: 15px;">
+                    <input type="text" id="input-busqueda-mecanico" placeholder="Buscar por nombre o Rut"/>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>RUT</th>
+                            <th>Nombre</th>
+                            <th>Especialidad</th>
+                            <th>Teléfono</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-tabla-mecanicos">
+                    </tbody>
+                </table>
+                </section>
         </div>
 
-    </main>
+
+</main>
 
     <script src="app.js"></script>
 </body>

@@ -74,10 +74,6 @@ input[type="number"] {
         box-shadow: 0 0 5px rgba(225, 102, 0, 0.5);
     }
 
-button[type="submit"]:hover {
-    background-color: #e65c00;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;
@@ -114,6 +110,7 @@ legend {
     font-size: 1.2rem;
 }
 
+/* ✅ BOTÓN MOTOS - sin translateY para que no se eleve */
 #formulario_moto button {
     width: 100%;
     padding: 12px;
@@ -127,16 +124,43 @@ legend {
     transition: all 0.3s ease;
     margin-top: 15px;
     text-transform: uppercase;
-    box-shadow: 0 4px 15px rgba(225, 102, 0, 0.5);
+    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.5);
 }
 
     #formulario_moto button:hover {
         background-color: #e65c00;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(225, 102, 0, 0.5);
+        transform: translateY(-2px); /* 👈 se eleva */
+        box-shadow: 0 0 8px rgba(255, 80, 0, 0.9), 0 0 20px rgba(255, 120, 0, 0.7), 0 0 40px rgba(255, 60, 0, 0.4);
     }
 
     #formulario_moto button:active {
+        transform: translateY(1px);
+    }
+
+/* ✅ BOTÓN MECÁNICOS - mismo estilo RGB */
+#formulario_personal button {
+    width: 100%;
+    padding: 12px;
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.5);
+}
+
+    #formulario_personal button:hover {
+        background-color: #e65c00;
+        transform: translateY(-2px); /* 👈 se eleva */
+        box-shadow: 0 0 8px rgba(255, 80, 0, 0.9), 0 0 20px rgba(255, 120, 0, 0.7), 0 0 40px rgba(255, 60, 0, 0.4);
+    }
+
+    #formulario_personal button:active {
         transform: translateY(1px);
     }
 
@@ -199,7 +223,7 @@ legend {
         border-color: #ff6600;
     }
 
-/* ✅ SECCIONES - SIN !important para que display:none funcione */
+/* ✅ SECCIONES */
 .seccion-app {
     display: flex;
     flex-direction: row;
