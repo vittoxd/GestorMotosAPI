@@ -11,7 +11,7 @@ async function cargarMotos() {
             const fila = `
             <tr>
                 <td>${moto.id}</td>
-                <td>${moto.rutDueno}</td>
+                <td>${formatearRut(moto.rutDueno)}</td>
                 <td>${moto.marca}</td>
                 <td>${moto.modelo}</td>
                 <td>${moto.año}</td>
@@ -39,7 +39,7 @@ async function cargarMecanicos() {
             const fila = `
             <tr>
                 <td>${mecanico.id}</td>
-                <td>${mecanico.rut}</td>
+                <td>${formatearRut(mecanico.rut)}</td>
                 <td>${mecanico.nombre}</td>
                 <td>${mecanico.especialidad}</td>
                 <td>${mecanico.telefono}</td>
@@ -64,6 +64,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     cargarMotos();
     cargarMecanicos();
+    const inputRutMoto = document.getElementById("input-rut");
+    if (inputRutMoto) {
+        inputRutMoto.addEventListener("input", (e) => {
+            e.target.value = formatearRut(e.target.value);
+        });
+    }
+
+    const inputRutMecanico = document.getElementById("input-rut-mecanico");
+    if (inputRutMecanico) {
+        inputRutMecanico.addEventListener("input", (e) => {
+            e.target.value = formatearRut(e.target.value);
+        });
+    }
 
     // ==================== FORMULARIO MOTOS ====================
 
@@ -230,12 +243,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function validarRut(rutCompleto) {
-        if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutCompleto)) return false;
-        let tmp = rutCompleto.split('-');
-        let digv = tmp[1];
-        let rut = tmp[0];
-        digv = digv.toLowerCase();
-        return (dv(rut) == digv);
+
+        let rutLimpio = rutCompleto.replace(/\./g, '').replace(/-/g, '');
+
+        if (rutLimpio.length < 8 || rutLimpio.length > 9) return false;
+
+
+        let cuerpo = rutLimpio.slice(0, -1);
+        let dvRecibido = rutLimpio.slice(-1).toLowerCase();
+
+        return (dv(cuerpo).toString() === dvRecibido);
     }
 
     function dv(cuerpoRut) {
@@ -346,4 +363,24 @@ function mostrarMensajeGlobal(texto, esError = false) {
     setTimeout(() => {
         caja.style.display = "none";
     }, 3000);
+}
+
+function formatearRut(rut) {
+    // Si el rut es nulo, vacío o no existe, devolvemos un texto vacío
+    if (!rut) return "";
+
+    // Convertimos a string por si acaso y limpiamos
+    let valor = rut.toString().replace(/\./g, '').replace(/-/g, '');
+
+    if (valor.length < 2) return valor;
+
+    let cuerpo = valor.slice(0, -1);
+    let dv = valor.slice(-1).toUpperCase();
+
+    let cuerpoFormateado = cuerpo.toString().split('').reverse().join('')
+        .replace(/(?=\d*\.?)(\d{3})/g, '$1.')
+        .split('').reverse().join('')
+        .replace(/^[\.]/, '');
+
+    return cuerpoFormateado + '-' + dv;
 }
