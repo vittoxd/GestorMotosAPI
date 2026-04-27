@@ -1,19 +1,14 @@
-document.addEventListener("DOMContentLoaded", function () {
+// ==================== FUNCIONES DE CARGA (GLOBALES) ====================
 
-    const URL_API = "/api/Moto";
-    const URL_API_MECANICOS = "/api/Mecanicos";
+async function cargarMotos() {
+    try {
+        const respuesta = await fetch("/api/Moto");
+        const Motos = await respuesta.json();
+        const tabla = document.getElementById("cuerpo-tabla");
+        tabla.innerHTML = "";
 
-    // ==================== MOTOS ====================
-
-    async function cargarMotos() {
-        try {
-            const respuesta = await fetch(URL_API);
-            const Motos = await respuesta.json();
-            const tabla = document.getElementById("cuerpo-tabla");
-            tabla.innerHTML = "";
-
-            Motos.forEach(moto => {
-                const fila = `
+        Motos.forEach(moto => {
+            const fila = `
             <tr>
                 <td>${moto.id}</td>
                 <td>${moto.rutDueno}</td>
@@ -26,14 +21,51 @@ document.addEventListener("DOMContentLoaded", function () {
                     <button class="btn-accion btn-eliminar" onclick="eliminarMoto(${moto.id})">🗑️</button>
                 </td>
             </tr>`;
-                tabla.innerHTML += fila;
-            });
-        } catch (error) {
-            console.error("¡Rayos! Algo salió mal:", error);
-        }
+            tabla.innerHTML += fila;
+        });
+    } catch (error) {
+        console.error("¡Rayos! Algo salió mal:", error);
     }
+}
+
+async function cargarMecanicos() {
+    try {
+        const respuesta = await fetch("/api/Mecanicos");
+        const mecanicos = await respuesta.json();
+        const tabla = document.getElementById("cuerpo-tabla-mecanicos");
+        tabla.innerHTML = "";
+
+        mecanicos.forEach(mecanico => {
+            const fila = `
+            <tr>
+                <td>${mecanico.id}</td>
+                <td>${mecanico.rut}</td>
+                <td>${mecanico.nombre}</td>
+                <td>${mecanico.especialidad}</td>
+                <td>${mecanico.telefono}</td>
+                <td>
+                    <button class="btn-accion btn-editar" onclick="prepararEdicionMecanico(${mecanico.id})">✏️</button>
+                    <button class="btn-accion btn-eliminar" onclick="eliminarMecanico(${mecanico.id})">🗑️</button>
+                </td>
+            </tr>`;
+            tabla.innerHTML += fila;
+        });
+    } catch (error) {
+        console.error("Error al cargar mecánicos:", error);
+    }
+}
+
+// ==================== DOMCONTENTLOADED ====================
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const URL_API = "/api/Moto";
+    const URL_API_MECANICOS = "/api/Mecanicos";
 
     cargarMotos();
+    cargarMecanicos();
+
+    // ==================== FORMULARIO MOTOS ====================
 
     const formulario = document.getElementById("formulario_moto");
     formulario.addEventListener("submit", async function (evento) {
@@ -109,36 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // ==================== MECÁNICOS ====================
-
-    async function cargarMecanicos() {
-        try {
-            const respuesta = await fetch(URL_API_MECANICOS);
-            const mecanicos = await respuesta.json();
-            const tabla = document.getElementById("cuerpo-tabla-mecanicos");
-            tabla.innerHTML = "";
-
-            mecanicos.forEach(mecanico => {
-                const fila = `
-            <tr>
-                <td>${mecanico.id}</td>
-                <td>${mecanico.rut}</td>
-                <td>${mecanico.nombre}</td>
-                <td>${mecanico.especialidad}</td>
-                <td>${mecanico.telefono}</td>
-                <td>
-                    <button class="btn-accion btn-editar" onclick="prepararEdicionMecanico(${mecanico.id})">✏️</button>
-                    <button class="btn-accion btn-eliminar" onclick="eliminarMecanico(${mecanico.id})">🗑️</button>
-                </td>
-            </tr>`;
-                tabla.innerHTML += fila;
-            });
-        } catch (error) {
-            console.error("Error al cargar mecánicos:", error);
-        }
-    }
-
-    cargarMecanicos();
+    // ==================== FORMULARIO MECÁNICOS ====================
 
     const btnRegistrarPersonal = document.querySelector("#formulario_personal button");
     btnRegistrarPersonal.addEventListener("click", async function (evento) {
@@ -246,7 +249,6 @@ document.addEventListener("DOMContentLoaded", function () {
 }); // FIN DOMContentLoaded
 
 // ==================== FUNCIONES GLOBALES ====================
-// Estas van FUERA del DOMContentLoaded para que los onclick del HTML puedan accederlas
 
 function mostrarSeccion(idSeccion, boton) {
     document.querySelectorAll('.seccion-app').forEach(sec => {
@@ -286,9 +288,10 @@ async function eliminarMoto(id) {
         const respuesta = await fetch(`/api/Moto/${id}`, { method: "DELETE" });
 
         if (respuesta.ok) {
-            location.reload();
+            mostrarMensajeGlobal("Moto eliminada correctamente 🗑️");
+            cargarMotos(); // ✅ solo recarga la tabla
         } else {
-            alert("No se pudo eliminar la moto ❌");
+            mostrarMensajeGlobal("No se pudo eliminar la moto ❌", true);
         }
     } catch (error) {
         console.error("Error al eliminar:", error);
@@ -321,11 +324,26 @@ async function eliminarMecanico(id) {
         const respuesta = await fetch(`/api/Mecanicos/${id}`, { method: "DELETE" });
 
         if (respuesta.ok) {
-            location.reload();
+            mostrarMensajeGlobal("Trabajador eliminado correctamente 🗑️");
+            cargarMecanicos(); // ✅ solo recarga la tabla
         } else {
-            alert("No se pudo eliminar el trabajador ❌");
+            mostrarMensajeGlobal("No se pudo eliminar el trabajador ❌", true);
         }
     } catch (error) {
         console.error("Error al eliminar:", error);
     }
+}
+
+// ✅ Versión global de mostrarMensaje para usar fuera del DOMContentLoaded
+function mostrarMensajeGlobal(texto, esError = false) {
+    const caja = document.getElementById("notificacion");
+    caja.innerText = texto;
+    caja.style.display = "block";
+    caja.style.backgroundColor = esError ? "#ffcccc" : "#ccffcc";
+    caja.style.color = esError ? "#990000" : "#006600";
+    caja.style.border = `1px solid ${esError ? "#990000" : "#006600"}`;
+
+    setTimeout(() => {
+        caja.style.display = "none";
+    }, 3000);
 }
