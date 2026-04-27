@@ -6,6 +6,10 @@ namespace GestorMotosAPI.Models
     {
         public int Id { get; set; }
 
+        [Required]
+        [StringLength(8)]
+        public string Patente { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "La marca es obligatoria")]
         public string Marca { get; set; } = string.Empty;
 
@@ -17,5 +21,6 @@ namespace GestorMotosAPI.Models
         public int Kilometraje { get; set; }
 
         public string RutDueno { get; set; } = string.Empty;
+
     }
 }

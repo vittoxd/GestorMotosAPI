@@ -12,6 +12,7 @@ async function cargarMotos() {
             <tr>
                 <td>${moto.id}</td>
                 <td>${formatearRut(moto.rutDueno)}</td>
+                <td>${moto.patente}</td>
                 <td>${moto.marca}</td>
                 <td>${moto.modelo}</td>
                 <td>${moto.año}</td>
@@ -90,6 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const anio = document.getElementById("input-anio").value;
         const kilometraje = document.getElementById("input-kilometraje").value;
         const rutIngresado = document.getElementById("input-rut").value;
+        const patente = document.getElementById("input-patente").value.toUpperCase(); 
 
         let metodo = "POST";
         let urlEnvio = URL_API;
@@ -106,6 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const moto = {
             id: idMoto ? parseInt(idMoto) : 0,
+            patente: patente,
             rutDueno: rutIngresado,
             marca: marca,
             modelo: modelo,
@@ -383,4 +386,20 @@ function formatearRut(rut) {
         .replace(/^[\.]/, '');
 
     return cuerpoFormateado + '-' + dv;
+}
+function formatearPatente(patente) {
+    return patente.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+
+    const regexMotos = /^[BCDFGHJKLMNPQRSTVWXYZ]{3}[0-9]{2}$/;
+    const regexAutos = /^[BCDFGHJKLMNPQRSTVWXYZ]{4}[0-9]{2}$/;
+    const regexAntigua = /^[A-Z]{2}[0-9]{4}$/;
+
+    return regexMotos.test(patente) || regexAutos.test(patente) || regexAntigua.test(patente)
+
+    const inputPatente = document.getElementById("input-patente");
+    if (inputPatente) {
+        inputPatente.addEventListener("input", (e) => {
+            e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+        });
+    }
 }
