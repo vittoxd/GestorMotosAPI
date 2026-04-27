@@ -10,6 +10,7 @@
     <nav class="navbar">
         <button onclick="mostrarSeccion('seccion-motos', this)" class="nav-btn active">Motos 🏍️</button>
         <button onclick="mostrarSeccion('seccion-mecanicos', this)" class="nav-btn">Personal 🔧</button>
+        <button id="btn-ordenes" class="btn-nav">Órdenes 📝</button>
     </nav>
 
     <main class="contenedor-principal">
@@ -124,6 +125,43 @@
                     </tbody>
                 </table>
                 </section>
+        </div>
+        <div id"seccion-ordenes" class="seccion" style="display: none">
+            <div class="contenedor-columnas">
+                <div class="columna-formulario">
+                    <h3>Generar orden de Trabajo🛠️</h3>
+                    <form id="formulario_ordenes">
+                        <label>Seleccionar Motos (Patente):</label>
+                        <select id="select-moto" required>
+                            <option value="">Cargando motos...</option>
+                        </select>
+                        <label>Asignar Mecánico:</label>
+                        <select>
+                            <option value="">Cargando personal...</option>
+                        </select>
+                        <label>Descripcion del Problema:</label>
+                        <textarea id="input-falla" placeholder="Ej: Cambio de aceite y revision de frenos" required></textarea>
+                        <button type="submit" class="btn-registrar">CREAR ORDEN!!</button>
+                    </form>
+                </div>
+                <div class="columna-tabla">
+                    <h3>Órdenes en Curso</h3>
+                    <table id="tabla-ordenes">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Moto</th>
+                                <th>Mecánico</th>
+                                <th>Falla</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-ordenes">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
 
