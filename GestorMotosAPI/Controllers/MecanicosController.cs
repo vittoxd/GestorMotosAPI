@@ -1,6 +1,7 @@
 ﻿using GestorMotosAPI.Data;
 using GestorMotosAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace GestorMotosAPI.Controllers
@@ -30,6 +31,22 @@ namespace GestorMotosAPI.Controllers
             var mecanico = _context.Mecanicos.Find(id);
             if (mecanico == null) return NotFound();
             return Ok(mecanico);
+        }
+
+        [HttpGet("buscar")]
+        public async Task<ActionResult<IEnumerable<Mecanico>>> BuscarMecanicos([FromQuery] string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                return await _context.Mecanicos.ToListAsync();
+            }
+
+            var q = query.ToUpper(); 
+
+            return await _context.Mecanicos
+                .Where(m => m.Rut.ToUpper().Contains(q) ||
+                            m.Nombre.ToUpper().Contains(q))
+                .ToListAsync();
         }
 
         // POST: api/Mecanicos (Registra uno nuevo)

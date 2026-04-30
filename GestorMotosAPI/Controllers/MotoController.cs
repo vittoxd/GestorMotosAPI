@@ -34,6 +34,25 @@ namespace GestorMotosAPI.Controllers
             return moto;
         }
 
+        [HttpGet("buscar")]
+        public async Task<ActionResult<IEnumerable<Moto>>> BuscarMotos([FromQuery] string termino)
+        {
+            if (string.IsNullOrWhiteSpace(termino))
+            {
+                return await _context.Motos.ToListAsync();
+            }
+
+            var t = termino.ToUpper();
+
+            // Al buscar por Patente o RutDueno, SQL usará los índices que acabas de crear
+            return await _context.Motos
+                .Where(m => m.Patente.ToUpper().Contains(t) ||
+                    m.Marca.ToUpper().Contains(t) ||
+                    m.Modelo.ToUpper().Contains(t))
+             .ToListAsync();
+
+        }
+
         // PUT: api/Moto/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMoto(int id, Moto moto)

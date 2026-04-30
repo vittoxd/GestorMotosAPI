@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace GestorMotosAPI.Models
 {
+    [Index(nameof(Rut), IsUnique = true)] 
     public class Mecanico
     {
         public int Id { get; set; }

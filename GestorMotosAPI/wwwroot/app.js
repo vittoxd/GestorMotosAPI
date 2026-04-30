@@ -6,6 +6,7 @@ async function cargarMotos() {
     try {
         const respuesta = await fetch("/api/Moto");
         const Motos = await respuesta.json();
+        dibujarTablaMotos(Motos);
         const tabla = document.getElementById("cuerpo-tabla");
         tabla.innerHTML = "";
 
@@ -275,34 +276,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Buscador de motos
 
+
     const inputBusqueda = document.getElementById('input-busqueda');
+    inputBusqueda.addEventListener('input', async function () {
+        const texto = inputBusqueda.value.trim();
 
-    const cuerpoTabla = document.getElementById('cuerpo-tabla');
-
-
-
-    inputBusqueda.addEventListener('input', function () {
-
-        const texto = inputBusqueda.value.toLowerCase();
-
-        const filas = cuerpoTabla.getElementsByTagName('tr');
-
-
-
-        for (let i = 0; i < filas.length; i++) {
-
-            const rut = filas[i].getElementsByTagName('td')[1].innerText.toLowerCase();
-
-            const marca = filas[i].getElementsByTagName('td')[2].innerText.toLowerCase();
-
-            const modelo = filas[i].getElementsByTagName('td')[3].innerText.toLowerCase();
-
-
-
-            filas[i].style.display = (rut.includes(texto) || marca.includes(texto) || modelo.includes(texto)) ? "" : "none";
-
+        if (texto === "") {
+            cargarMotos();
+            return;
         }
 
+        try {
+            const respuesta = await fetch(`/api/Moto/buscar?termino=${texto.toUpperCase()}`);
+            const motosFiltradas = await respuesta.json();
+
+            dibujarTablaMotos(motosFiltradas);
+        } catch (error) {
+            console.error("Error en la busqueda rápida:", error)
+        }
     });
 
 
@@ -927,4 +918,26 @@ async function eliminarOrden(id) {
 
     }
 
+}
+function dibujarTablaMotos(motos) {
+    const tabla = document.getElementById("cuerpo-tabla");
+    tabla.innerHTML = "";
+
+    motos.forEach(moto => {
+        const fila = `
+        <tr>
+            <td>${moto.id}</td>
+            <td>${formatearRut(moto.rutDueno)}</td>
+            <td>${moto.patente ? moto.patente : '---'}</td>
+            <td>${moto.marca}</td>
+            <td>${moto.modelo}</td>
+            <td>${moto.año}</td>
+            <td>${moto.kilometraje} km</td>
+            <td>
+                <button class="btn-accion btn-editar" onclick="prepararEdicion(${moto.id})">✏️</button>
+                <button class="btn-accion btn-eliminar" onclick="eliminarMoto(${moto.id})">🗑️</button>
+            </td>
+        </tr>`;
+        tabla.innerHTML += fila;
+    });
 }
