@@ -8,6 +8,8 @@ namespace GestorMotosAPI.Models
         public int Id {  get; set; }
         public DateTime fecha {  get; set; } = DateTime.Now;
         public string Descripcion { get; set; } = string.Empty;
+
+        public string Estado { get; set; } = "En Espera";
         public decimal costo { get; set; }
 
         public int MotoId { get; set; }

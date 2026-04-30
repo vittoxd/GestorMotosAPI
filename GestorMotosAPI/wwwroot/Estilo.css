@@ -1,3 +1,6 @@
+/* ==========================================
+   1. BASE Y RESET
+   ========================================== */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -11,12 +14,47 @@ body {
     padding: 20px;
 }
 
-.contenedor-principal {
-    display: block;
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
+/* ==========================================
+   2. NAVBAR
+   ========================================== */
+.navbar {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
     padding: 20px;
+    background-color: #111;
+    border-bottom: 2px solid #ff6600;
+    margin-bottom: 30px;
+}
+
+.btn-nav, .nav-btn {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+    .btn-nav.active, .nav-btn.active {
+        background-color: #ff6600;
+        border-color: #ff6600;
+        box-shadow: 0 0 15px rgba(255, 102, 0, 0.8);
+    }
+
+/* ==========================================
+   3. LAYOUT
+   ========================================== */
+.seccion-app, .seccion {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
 }
 
 .panel-formulario {
@@ -24,23 +62,32 @@ body {
     padding: 25px;
     border-radius: 12px;
     width: 350px;
+    min-width: 350px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-.panel-inventario {
+.panel-inventario, .columna-tabla {
     background-color: #1e1e1e;
     padding: 25px;
     border-radius: 12px;
     flex: 1;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    overflow-x: auto;
 }
 
-h2 {
-    color: #ffffff;
-    border-bottom: 2px solid #ff6600;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+/* ==========================================
+   4. FORMULARIOS
+   ========================================== */
+fieldset {
+    border: 2px solid #ff6600;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+legend {
+    color: #ff6600;
+    font-weight: bold;
+    padding: 0 10px;
+    text-align: center;
 }
 
 form div {
@@ -50,195 +97,193 @@ form div {
 }
 
 label {
-    font-weight: 600;
+    font-size: 0.85rem;
     margin-bottom: 5px;
     color: #b0b0b0;
-    font-size: 0.9rem;
 }
 
-input[type="text"],
-input[type="number"] {
+input, select, textarea {
     padding: 10px;
-    border-radius: 6px;
+    background-color: #333;
     border: 1px solid #444;
-    background-color: #444;
-    color: #ffffff;
-    font-size: 1rem;
-    transition: all 0.3s ease;
+    color: white;
+    border-radius: 6px;
+    width: 100%;
 }
 
-    input[type="text"]:focus,
-    input[type="number"]:focus {
-        outline: none;
-        border-color: #ff6600;
-        box-shadow: 0 0 5px rgba(225, 102, 0, 0.5);
-    }
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
 
-table {
+.btn-registrar,
+#formulario_moto button,
+#formulario_personal button,
+#formulario_ordenes button {
+    background-color: #ff6600;
+    color: white;
+    padding: 12px;
     width: 100%;
-    border-collapse: collapse;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.4);
     margin-top: 10px;
 }
 
-th, td {
-    padding: 12px;
-    border-bottom: 1px solid #333;
+/* ==========================================
+   5. TÍTULOS DE SECCIÓN
+   ========================================== */
+.panel-inventario h2,
+.columna-tabla h3,
+.columna-formulario h3 {
+    color: white;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
 }
 
+.panel-inventario input[type="text"] {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+/* ==========================================
+   6. TABLAS — UNIFICADAS
+   ========================================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* ← CLAVE: fuerza que las columnas no se desajusten */
+}
+
+/* ENCABEZADOS */
 th {
     background-color: #2a2a2a;
     color: #ff6600;
+    padding: 14px 10px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    text-align: center;
+    vertical-align: middle;
 }
 
+/* CELDAS */
 td {
+    padding: 16px 10px;
+    border-bottom: 1px solid #333;
+    color: white;
+    text-align: center;
+    vertical-align: middle; /* ← alinea verticalmente el contenido */
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-fieldset {
-    border: 2px solid #ff6600;
-    border-radius: 10px;
-    padding: 20px;
+/* HOVER FILAS */
+tr:hover {
+    background-color: #1f1f1f;
 }
 
-legend {
+/* ==========================================
+   7. COLUMNA ACCIONES — FIX PRINCIPAL
+   ========================================== */
+th:last-child,
+td:last-child {
     text-align: center;
-    float: none;
-    margin: 0 auto;
-    padding: 0 15px;
-    color: #f60;
-    font-weight: bold;
-    font-size: 1.2rem;
+    white-space: nowrap;
+    width: 120px; /* ancho fijo para que no se comprima ni expanda */
+    vertical-align: middle;
 }
 
-/* ✅ BOTÓN MOTOS - sin translateY para que no se eleve */
-#formulario_moto button {
-    width: 100%;
-    padding: 12px;
-    background-color: #ff6600;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 15px;
-    text-transform: uppercase;
-    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.5);
+/* Hace que los botones dentro del td queden centrados y alineados */
+td:last-child {
+    display: table-cell; /* asegura que siga siendo celda */
+    vertical-align: middle;
+    padding: 10px;
 }
 
-    #formulario_moto button:hover {
-        background-color: #e65c00;
-        transform: translateY(-2px); /* 👈 se eleva */
-        box-shadow: 0 0 8px rgba(255, 80, 0, 0.9), 0 0 20px rgba(255, 120, 0, 0.7), 0 0 40px rgba(255, 60, 0, 0.4);
-    }
-
-    #formulario_moto button:active {
-        transform: translateY(1px);
-    }
-
-/* ✅ BOTÓN MECÁNICOS - mismo estilo RGB */
-#formulario_personal button {
-    width: 100%;
-    padding: 12px;
-    background-color: #ff6600;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 15px;
-    text-transform: uppercase;
-    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.5);
-}
-
-    #formulario_personal button:hover {
-        background-color: #e65c00;
-        transform: translateY(-2px); /* 👈 se eleva */
-        box-shadow: 0 0 8px rgba(255, 80, 0, 0.9), 0 0 20px rgba(255, 120, 0, 0.7), 0 0 40px rgba(255, 60, 0, 0.4);
-    }
-
-    #formulario_personal button:active {
-        transform: translateY(1px);
-    }
-
+/* ==========================================
+   8. BOTONES DE ACCIÓN
+   ========================================== */
 .btn-accion {
-    padding: 6px 10px;
-    border-radius: 8px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 34px;
+    height: 34px;
+    margin: 0 3px;
+    border-radius: 6px;
     border: none;
     cursor: pointer;
-    font-size: 1.1rem;
-    transition: all 0.3s ease;
-    margin-right: 5px;
+    font-size: 0.95rem;
+    transition: transform 0.2s;
+    vertical-align: middle; /* ← alinea con otros botones inline */
 }
 
 .btn-editar {
-    background-color: #008ea8;
+    background-color: #00bcd4;
     color: white;
-    box-shadow: 0 0 5px rgba(0, 168, 232, 0.3);
 }
-
-    .btn-editar:hover {
-        background-color: #007ea7;
-        transform: scale(1.1);
-        box-shadow: 0 0 15px rgba(0, 168, 232, 0.6);
-    }
 
 .btn-eliminar {
     background-color: #ff4d4d;
     color: white;
-    box-shadow: 0 0 5px rgba(255, 77, 77, 0.3);
 }
 
-    .btn-eliminar:hover {
-        background-color: #cc0000;
-        transform: scale(1.1);
-        box-shadow: 0 0 15px rgba(255, 77, 77, 0.6);
-    }
+.btn-accion:hover {
+    transform: scale(1.1);
+}
 
-/* ✅ NAVBAR */
-.navbar {
+/* ==========================================
+   9. ÓRDENES — LAYOUT COLUMNAS
+   ========================================== */
+.contenedor-columnas {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-    padding: 20px;
-    background-color: #111;
-    border-bottom: 2px solid #ff6600;
-}
-
-.nav-btn {
-    background-color: #333;
-    color: white;
-    padding: 10px 20px;
-    border: 1px solid #444;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-    .nav-btn.active {
-        background-color: #ff6600;
-        border-color: #ff6600;
-    }
-
-/* ✅ SECCIONES */
-.seccion-app {
-    display: flex;
-    flex-direction: row;
     gap: 30px;
     align-items: flex-start;
-    padding: 20px;
     width: 100%;
 }
-#input-patente {
-    background-color : #333;
-    color: white ;
-    border : 1px solid #555;
-    padding: 8px;
-    width: 100%;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    text-transform: uppercase;
+
+.columna-formulario {
+    background-color: #1e1e1e;
+    padding: 25px;
+    border-radius: 12px;
+    width: 350px;
+    min-width: 350px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+    .columna-formulario label {
+        font-size: 0.85rem;
+        color: #b0b0b0;
+        margin-top: 8px;
+    }
+
+    .columna-formulario select,
+    .columna-formulario textarea {
+        padding: 10px;
+        background-color: #333;
+        border: 1px solid #444;
+        color: white;
+        border-radius: 6px;
+        width: 100%;
+    }
+
+/* ==========================================
+   10. NOTIFICACIONES
+   ========================================== */
+#notificacion {
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #2e7d32;
+    color: white;
+    border-left: 4px solid #66bb6a;
 }

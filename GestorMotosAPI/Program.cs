@@ -35,6 +35,7 @@ if (app.Environment.IsDevelopment())
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

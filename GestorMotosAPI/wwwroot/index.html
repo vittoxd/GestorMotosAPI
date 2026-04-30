@@ -16,7 +16,7 @@
     <main class="contenedor-principal">
         <div id="notificacion" style="display: none;"></div>
 
-        <div id="seccion-motos" class="seccion-app">
+        <div id="seccion-motos" class="seccion">
             <section class="panel-formulario">
                 <form id="formulario_moto">
                     <fieldset>
@@ -69,7 +69,7 @@
                 </table>
             </section>
         </div>
-        <div id="seccion-mecanicos" class="seccion-app" style="display: none;">
+        <div id="seccion-mecanicos" class="seccion" style="display: none;">
             <section class="panel-formulario">
                 <form id="formulario_personal">
                     <fieldset>
@@ -126,7 +126,7 @@
                 </table>
                 </section>
         </div>
-        <div id"seccion-ordenes" class="seccion" style="display: none">
+        <div id="seccion-ordenes" class="seccion" style="display: none">
             <div class="contenedor-columnas">
                 <div class="columna-formulario">
                     <h3>Generar orden de Trabajo🛠️</h3>
@@ -136,7 +136,7 @@
                             <option value="">Cargando motos...</option>
                         </select>
                         <label>Asignar Mecánico:</label>
-                        <select>
+                        <select id="select-mecanico-orden" required>
                             <option value="">Cargando personal...</option>
                         </select>
                         <label>Descripcion del Problema:</label>

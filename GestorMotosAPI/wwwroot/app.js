@@ -1,5 +1,7 @@
 // ==================== FUNCIONES DE CARGA (GLOBALES) ====================
 
+
+
 async function cargarMotos() {
     try {
         const respuesta = await fetch("/api/Moto");
@@ -12,7 +14,7 @@ async function cargarMotos() {
             <tr>
                 <td>${moto.id}</td>
                 <td>${formatearRut(moto.rutDueno)}</td>
-                <td>${moto.patente}</td>
+                <td>${moto.patente ? moto.patente : '---'}</td>
                 <td>${moto.marca}</td>
                 <td>${moto.modelo}</td>
                 <td>${moto.año}</td>
@@ -29,377 +31,900 @@ async function cargarMotos() {
     }
 }
 
+
+
 async function cargarMecanicos() {
+
     try {
+
         const respuesta = await fetch("/api/Mecanicos");
+
         const mecanicos = await respuesta.json();
+
         const tabla = document.getElementById("cuerpo-tabla-mecanicos");
+
         tabla.innerHTML = "";
 
+
+
         mecanicos.forEach(mecanico => {
+
             const fila = `
+
             <tr>
+
                 <td>${mecanico.id}</td>
+
                 <td>${formatearRut(mecanico.rut)}</td>
+
                 <td>${mecanico.nombre}</td>
+
                 <td>${mecanico.especialidad}</td>
+
                 <td>${mecanico.telefono}</td>
+
                 <td>
+
                     <button class="btn-accion btn-editar" onclick="prepararEdicionMecanico(${mecanico.id})">✏️</button>
+
                     <button class="btn-accion btn-eliminar" onclick="eliminarMecanico(${mecanico.id})">🗑️</button>
+
                 </td>
+
             </tr>`;
+
             tabla.innerHTML += fila;
+
         });
+
     } catch (error) {
+
         console.error("Error al cargar mecánicos:", error);
+
     }
+
 }
+
+
 
 // ==================== DOMCONTENTLOADED ====================
 
+
+
 document.addEventListener("DOMContentLoaded", function () {
 
+
+
     const URL_API = "/api/Moto";
+
     const URL_API_MECANICOS = "/api/Mecanicos";
 
+
+
     cargarMotos();
+
     cargarMecanicos();
+
     const inputRutMoto = document.getElementById("input-rut");
+
     if (inputRutMoto) {
+
         inputRutMoto.addEventListener("input", (e) => {
+
             e.target.value = formatearRut(e.target.value);
+
         });
+
     }
 
+
+
     const inputRutMecanico = document.getElementById("input-rut-mecanico");
+
     if (inputRutMecanico) {
+
         inputRutMecanico.addEventListener("input", (e) => {
+
             e.target.value = formatearRut(e.target.value);
+
         });
+
     }
+
+
+
+    const btnOrdenes = document.getElementById("btn-ordenes");
+
+    const seccionOrdenes = document.getElementById("seccion-ordenes");
+
+
+
+    btnOrdenes.addEventListener("click", () => {
+
+        mostrarSeccion("seccion-ordenes", document.getElementById("btn-motos"));
+
+        cargarOrdenes(); // Cargamos la tabla
+
+        llenarSelectsOrden(); // Llenamos los menús desplegables
+
+    });
+
+
 
     // ==================== FORMULARIO MOTOS ====================
 
+
+
     const formulario = document.getElementById("formulario_moto");
+
     formulario.addEventListener("submit", async function (evento) {
+
         evento.preventDefault();
 
+
+
         const idMoto = document.getElementById("input-id").value;
+
         const marca = document.getElementById("input-marca").value;
+
         const modelo = document.getElementById("input-modelo").value;
+
         const anio = document.getElementById("input-anio").value;
+
         const kilometraje = document.getElementById("input-kilometraje").value;
+
         const rutIngresado = document.getElementById("input-rut").value;
-        const patente = document.getElementById("input-patente").value.toUpperCase(); 
+
+        const patente = document.getElementById("input-patente").value.toUpperCase();
+
+
 
         let metodo = "POST";
+
         let urlEnvio = URL_API;
 
+
+
         if (idMoto) {
+
             metodo = "PUT";
+
             urlEnvio = `${URL_API}/${idMoto}`;
+
         }
+
+
 
         if (!validarRut(rutIngresado)) {
+
             mostrarMensaje("RUT Inválido. Usa el formato 12345678-9", true);
+
             return;
+
         }
+
+
 
         const moto = {
+
             id: idMoto ? parseInt(idMoto) : 0,
+
             patente: patente,
+
             rutDueno: rutIngresado,
+
             marca: marca,
+
             modelo: modelo,
+
             año: parseInt(anio),
+
             kilometraje: parseInt(kilometraje)
+
         };
 
+
+
         try {
+
             const response = await fetch(urlEnvio, {
+
                 method: metodo,
+
                 headers: { "Content-Type": "application/json" },
+
                 body: JSON.stringify(moto)
+
             });
 
+
+
             if (response.ok) {
+
                 const textoMensaje = idMoto ? "Moto actualizada con éxito" : "Moto registrada con éxito";
+
                 mostrarMensaje(textoMensaje);
+
                 formulario.reset();
+
                 document.getElementById("input-id").value = "";
+
                 cargarMotos();
+
                 const boton = document.querySelector("#formulario_moto button[type='submit']");
+
                 boton.innerText = "REGISTRAR MOTO 🚀";
+
             } else {
+
                 mostrarMensaje("Error al procesar la solicitud", true);
+
             }
+
         } catch (error) {
+
             console.error("Error:", error);
+
             mostrarMensaje("No se pudo conectar con el servidor", true);
+
         }
+
     });
+
+
 
     // Buscador de motos
+
     const inputBusqueda = document.getElementById('input-busqueda');
+
     const cuerpoTabla = document.getElementById('cuerpo-tabla');
 
+
+
     inputBusqueda.addEventListener('input', function () {
+
         const texto = inputBusqueda.value.toLowerCase();
+
         const filas = cuerpoTabla.getElementsByTagName('tr');
 
+
+
         for (let i = 0; i < filas.length; i++) {
+
             const rut = filas[i].getElementsByTagName('td')[1].innerText.toLowerCase();
+
             const marca = filas[i].getElementsByTagName('td')[2].innerText.toLowerCase();
+
             const modelo = filas[i].getElementsByTagName('td')[3].innerText.toLowerCase();
 
+
+
             filas[i].style.display = (rut.includes(texto) || marca.includes(texto) || modelo.includes(texto)) ? "" : "none";
+
         }
+
     });
+
+
 
     // ==================== FORMULARIO MECÁNICOS ====================
 
+
+
     const btnRegistrarPersonal = document.querySelector("#formulario_personal button");
+
     btnRegistrarPersonal.addEventListener("click", async function (evento) {
+
         evento.preventDefault();
 
+
+
         const idMecanico = document.getElementById("input-id-mecanico").value;
+
         const rut = document.getElementById("input-rut-mecanico").value;
+
         const nombre = document.getElementById("input-nombre-mecanico").value;
+
         const especialidad = document.getElementById("select-especialidad").value;
+
         const telefono = document.getElementById("input-telefono-mecanico").value;
 
+
+
         if (!validarRut(rut)) {
+
             mostrarMensaje("RUT Inválido. Usa el formato 12345678-9", true);
+
             return;
+
         }
+
+
 
         let metodo = "POST";
+
         let urlEnvio = URL_API_MECANICOS;
 
+
+
         if (idMecanico) {
+
             metodo = "PUT";
+
             urlEnvio = `${URL_API_MECANICOS}/${idMecanico}`;
+
         }
+
+
 
         const mecanico = {
+
             id: idMecanico ? parseInt(idMecanico) : 0,
+
             rut: rut,
+
             nombre: nombre,
+
             especialidad: especialidad,
+
             telefono: telefono
+
         };
 
+
+
         try {
+
             const response = await fetch(urlEnvio, {
+
                 method: metodo,
+
                 headers: { "Content-Type": "application/json" },
+
                 body: JSON.stringify(mecanico)
+
             });
 
+
+
             if (response.ok) {
+
                 const textoMensaje = idMecanico ? "Mecánico actualizado con éxito ✅" : "Trabajador registrado con éxito ✅";
+
                 mostrarMensaje(textoMensaje);
+
                 document.getElementById("formulario_personal").reset();
+
                 document.getElementById("input-id-mecanico").value = "";
+
                 cargarMecanicos();
+
                 const boton = document.querySelector("#formulario_personal button");
+
                 boton.innerText = "REGISTRAR TRABAJADOR!";
+
             } else {
+
                 mostrarMensaje("Error al procesar la solicitud", true);
+
             }
+
         } catch (error) {
+
             console.error("Error:", error);
+
             mostrarMensaje("No se pudo conectar con el servidor", true);
+
         }
+
     });
+
+
 
     // Buscador de mecánicos
+
     const inputBusquedaMecanico = document.getElementById('input-busqueda-mecanico');
+
     const cuerpoTablaMecanicos = document.getElementById('cuerpo-tabla-mecanicos');
 
+
+
     inputBusquedaMecanico.addEventListener('input', function () {
+
         const texto = inputBusquedaMecanico.value.toLowerCase();
+
         const filas = cuerpoTablaMecanicos.getElementsByTagName('tr');
 
+
+
         for (let i = 0; i < filas.length; i++) {
+
             const rut = filas[i].getElementsByTagName('td')[1].innerText.toLowerCase();
+
             const nombre = filas[i].getElementsByTagName('td')[2].innerText.toLowerCase();
 
+
+
             filas[i].style.display = (rut.includes(texto) || nombre.includes(texto)) ? "" : "none";
+
         }
+
     });
+
+
 
     // ==================== COMPARTIDO ====================
 
+
+
     function mostrarMensaje(texto, esError = false) {
+
         const caja = document.getElementById("notificacion");
+
         caja.innerText = texto;
+
         caja.style.display = "block";
+
         caja.style.backgroundColor = esError ? "#ffcccc" : "#ccffcc";
+
         caja.style.color = esError ? "#990000" : "#006600";
+
         caja.style.border = `1px solid ${esError ? "#990000" : "#006600"}`;
 
+
+
         setTimeout(() => {
-            caja.style.display = "none";
-        }, 3000);
+            cargarMotos();
+            cargarMecanicos();
+        }, 100);
+
     }
+
+
 
     function validarRut(rutCompleto) {
 
+
+
         let rutLimpio = rutCompleto.replace(/\./g, '').replace(/-/g, '');
+
+
 
         if (rutLimpio.length < 8 || rutLimpio.length > 9) return false;
 
 
+
+
+
         let cuerpo = rutLimpio.slice(0, -1);
+
         let dvRecibido = rutLimpio.slice(-1).toLowerCase();
 
+
+
         return (dv(cuerpo).toString() === dvRecibido);
+
     }
 
+
+
     function dv(cuerpoRut) {
+
         let M = 0, S = 1;
+
         for (; cuerpoRut; cuerpoRut = Math.floor(cuerpoRut / 10)) {
+
             S = (S + cuerpoRut % 10 * (9 - M++ % 6)) % 11;
+
         }
+
         return S ? S - 1 : 'k';
+
     }
+    // ✅ DESPUÉS
+    const formularioOrdenes = document.getElementById("formulario_ordenes");
+    if (formularioOrdenes) {
+        formularioOrdenes.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const nuevaOrden = {
+                motoId: parseInt(document.getElementById("select-moto").value),
+                mecanicoId: parseInt(document.getElementById("select-mecanico-orden").value),
+                descripcion: document.getElementById("input-falla").value,
+                estado: "En Espera",
+                fecha: new Date().toISOString()
+            };
+
+            const res = await fetch("/api/OrdenesTrabajo", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(nuevaOrden)
+            });
+
+            if (res.ok) {
+                alert("Orden creada con éxito 🚀");
+                e.target.reset();
+                cargarOrdenes();
+            } else {
+                alert("Error al crear la orden");
+            }
+        });
+    }
+
+
 
 }); // FIN DOMContentLoaded
 
+
+
 // ==================== FUNCIONES GLOBALES ====================
 
+
+
 function mostrarSeccion(idSeccion, boton) {
-    document.querySelectorAll('.seccion-app').forEach(sec => {
+    // 1. Apagamos todas las secciones
+    // IMPORTANTE: Asegúrate que en tu HTML digan class="seccion"
+    document.querySelectorAll('.seccion').forEach(sec => {
         sec.style.display = 'none';
     });
-    document.getElementById(idSeccion).style.display = 'flex';
-    document.querySelectorAll('.nav-btn').forEach(btn => {
+
+    // 2. Prendemos solo la que necesitamos
+    const target = document.getElementById(idSeccion);
+    if (target) {
+        target.style.display = 'flex';
+    }
+
+    // 3. Cambiamos el color del botón para saber dónde estamos
+    document.querySelectorAll('.btn-nav, .nav-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    boton.classList.add('active');
+    if (boton) {
+        boton.classList.add('active');
+    }
 }
+
 
 async function prepararEdicion(id) {
+
     try {
+
         const respuesta = await fetch(`/api/Moto/${id}`);
+
         const moto = await respuesta.json();
 
+
+
         document.getElementById("input-id").value = moto.id;
+
         document.getElementById("input-rut").value = moto.rutDueno;
+
         document.getElementById("input-marca").value = moto.marca;
+
         document.getElementById("input-modelo").value = moto.modelo;
+
         document.getElementById("input-anio").value = moto.año;
+
         document.getElementById("input-kilometraje").value = moto.kilometraje;
 
+
+
         const boton = document.querySelector("#formulario_moto button[type='submit']");
+
         boton.innerText = "Actualizar Cambios 🔄";
+
         window.scrollTo(0, 0);
+
     } catch (error) {
+
         console.error("Error al cargar datos para edición:", error);
+
     }
+
 }
+
+
 
 async function eliminarMoto(id) {
+
     if (!confirm("¿Estás seguro de que quieres eliminar esta moto? 🧐")) return;
 
+
+
     try {
+
         const respuesta = await fetch(`/api/Moto/${id}`, { method: "DELETE" });
 
+
+
         if (respuesta.ok) {
+
             mostrarMensajeGlobal("Moto eliminada correctamente 🗑️");
+
             cargarMotos(); // ✅ solo recarga la tabla
+
         } else {
+
             mostrarMensajeGlobal("No se pudo eliminar la moto ❌", true);
+
         }
+
     } catch (error) {
+
         console.error("Error al eliminar:", error);
+
     }
+
 }
+
+
 
 async function prepararEdicionMecanico(id) {
+
     try {
+
         const respuesta = await fetch(`/api/Mecanicos/${id}`);
+
         const mecanico = await respuesta.json();
 
+
+
         document.getElementById("input-id-mecanico").value = mecanico.id;
+
         document.getElementById("input-rut-mecanico").value = mecanico.rut;
+
         document.getElementById("input-nombre-mecanico").value = mecanico.nombre;
+
         document.getElementById("select-especialidad").value = mecanico.especialidad;
+
         document.getElementById("input-telefono-mecanico").value = mecanico.telefono;
 
+
+
         const boton = document.querySelector("#formulario_personal button");
+
         boton.innerText = "Actualizar Cambios 🔄";
+
         window.scrollTo(0, 0);
+
     } catch (error) {
+
         console.error("Error al cargar datos para edición:", error);
+
     }
+
 }
+
+
 
 async function eliminarMecanico(id) {
+
     if (!confirm("¿Estás seguro de que quieres eliminar este trabajador? 🧐")) return;
 
+
+
     try {
+
         const respuesta = await fetch(`/api/Mecanicos/${id}`, { method: "DELETE" });
 
+
+
         if (respuesta.ok) {
+
             mostrarMensajeGlobal("Trabajador eliminado correctamente 🗑️");
+
             cargarMecanicos(); // ✅ solo recarga la tabla
+
         } else {
+
             mostrarMensajeGlobal("No se pudo eliminar el trabajador ❌", true);
+
         }
+
     } catch (error) {
+
         console.error("Error al eliminar:", error);
+
     }
+
 }
+
+
 
 // ✅ Versión global de mostrarMensaje para usar fuera del DOMContentLoaded
+
 function mostrarMensajeGlobal(texto, esError = false) {
+
     const caja = document.getElementById("notificacion");
+
     caja.innerText = texto;
+
     caja.style.display = "block";
+
     caja.style.backgroundColor = esError ? "#ffcccc" : "#ccffcc";
+
     caja.style.color = esError ? "#990000" : "#006600";
+
     caja.style.border = `1px solid ${esError ? "#990000" : "#006600"}`;
 
+
+
     setTimeout(() => {
+
         caja.style.display = "none";
+
     }, 3000);
+
 }
 
+
+
 function formatearRut(rut) {
+
     // Si el rut es nulo, vacío o no existe, devolvemos un texto vacío
+
     if (!rut) return "";
 
+
+
     // Convertimos a string por si acaso y limpiamos
+
     let valor = rut.toString().replace(/\./g, '').replace(/-/g, '');
+
+
 
     if (valor.length < 2) return valor;
 
+
+
     let cuerpo = valor.slice(0, -1);
+
     let dv = valor.slice(-1).toUpperCase();
 
+
+
     let cuerpoFormateado = cuerpo.toString().split('').reverse().join('')
+
         .replace(/(?=\d*\.?)(\d{3})/g, '$1.')
+
         .split('').reverse().join('')
+
         .replace(/^[\.]/, '');
 
+
+
     return cuerpoFormateado + '-' + dv;
+
 }
+
 function formatearPatente(patente) {
+
     return patente.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
 
+
+
     const regexMotos = /^[BCDFGHJKLMNPQRSTVWXYZ]{3}[0-9]{2}$/;
+
     const regexAutos = /^[BCDFGHJKLMNPQRSTVWXYZ]{4}[0-9]{2}$/;
+
     const regexAntigua = /^[A-Z]{2}[0-9]{4}$/;
+
+
 
     return regexMotos.test(patente) || regexAutos.test(patente) || regexAntigua.test(patente)
 
+
+
     const inputPatente = document.getElementById("input-patente");
+
     if (inputPatente) {
+
         inputPatente.addEventListener("input", (e) => {
+
             e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+
         });
+
     }
+
+}
+
+
+
+async function llenarSelectsOrden() {
+
+    try {
+
+        const resMotos = await fetch("/api/moto");
+
+        const motos = await resMotos.json();
+
+        const selectMoto = document.getElementById("select-moto");
+
+
+
+        selectMoto.innerHTML = '<option value="">Seleccion una moto...</option>';
+
+        motos.forEach(m => {
+
+            selectMoto.innerHTML += `<option value="${m.id}">${m.patente} - ${m.marca}</option>`;
+        });
+
+
+
+        const resMecanicos = await fetch("/api/Mecanicos");
+
+        const mecanicos = await resMecanicos.json();
+
+        const selectMeca = document.getElementById("select-mecanico-orden");
+
+
+
+        selectMeca.innerHTML = '<option value="">Seleccione un mecánico...</option>';
+
+        mecanicos.forEach(m => {
+
+            selectMeca.innerHTML += `<option value="${m.id}">${m.nombre}</option>`;
+
+
+
+        });
+
+    } catch (error) {
+
+        console.error("error al llenar los select:", error);
+
+    }
+
+}
+
+async function cargarOrdenes() {
+    const res = await fetch("/api/OrdenesTrabajo");
+    const ordenes = await res.json();
+    const cuerpoTabla = document.getElementById("lista-ordenes");
+    cuerpoTabla.innerHTML = "";
+
+    ordenes.forEach(o => {
+        cuerpoTabla.innerHTML += `
+            <tr>
+                <td>${o.id}</td>
+                <td>${o.moto ? o.moto.patente : 'N/A'}</td>
+                <td>${o.mecanico ? o.mecanico.nombre : 'Sin asignar'}</td>
+                <td>${o.descripcion}</td>
+                <td><span class="badge">${o.estado}</span></td>
+                <td>
+                    <button onclick="eliminarOrden(${o.id})" class="btn-accion btn-eliminar">🗑️</button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+// Agrégala también al final del JS
+
+async function eliminarOrden(id) {
+
+    if (confirm("¿Estás seguro de eliminar esta orden de trabajo?")) {
+
+        const res = await fetch(`/api/OrdenesTrabajo/${id}`, {
+
+            method: "DELETE"
+
+        });
+
+
+
+        if (res.ok) {
+
+            alert("Orden eliminada correctamente");
+
+            cargarOrdenes(); // Recargamos la tabla para que desaparezca
+
+        } else {
+
+            alert("No se pudo eliminar la orden");
+
+        }
+
+    }
+
 }
