@@ -881,7 +881,14 @@ async function cargarOrdenes() {
                 <td>${o.moto ? o.moto.patente : 'N/A'}</td>
                 <td>${o.mecanico ? o.mecanico.nombre : 'Sin asignar'}</td>
                 <td>${o.descripcion}</td>
-                <td><span class="badge">${o.estado}</span></td>
+                <td>
+                    <select class="select-estado ${getClaseEstado(o.estado)}"
+                        onchange="actualizarEstado(${o.id}, this.value)">
+                        <option value="En Espera" ${o.estado === 'En Espera' ? 'selected' : ''}>⏳ En Espera</option>
+                        <option value="En Espera" ${o.estado === 'En Proceso' ? 'selected' : ''}>🔧 En Proces</option>
+                        <option value="En Espera" ${o.estado === 'Terminado' ? 'selected' : ''}>✅ Terminado</option>
+
+                </td>
                 <td>
                     <button onclick="eliminarOrden(${o.id})" class="btn-accion btn-eliminar">🗑️</button>
                 </td>
