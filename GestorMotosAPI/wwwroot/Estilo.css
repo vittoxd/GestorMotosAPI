@@ -287,3 +287,27 @@ td:last-child {
     color: white;
     border-left: 4px solid #66bb6a;
 }
+
+
+.select-estado {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #333;
+    color: white;
+}
+
+.estado-espera {
+    border-left: 5px solid #ffa500;
+}
+/* Naranja */
+.estado-proceso {
+    border-left: 5px solid #00bcff;
+}
+/* Azul */
+.estado-terminado {
+    border-left: 5px solid #28a745;
+}
+/* Verde */

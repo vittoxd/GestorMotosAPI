@@ -948,3 +948,33 @@ function dibujarTablaMotos(motos) {
         tabla.innerHTML += fila;
     });
 }
+
+
+async function actualizarEstado(id, nuevoEstado) {
+    try {
+        const res = await fetch(`/api/OrdenesTrabajo/${id}/estado`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(nuevoEstado) // Esto enviará "Terminado" (con comillas)
+        });
+
+        if (res.ok) {
+            mostrarMensajeGlobal("¡Estado actualizado! 🚀");
+            // No es necesario recargar todo si solo cambió un color
+        } else {
+            console.error("Error del servidor:", res.status);
+            alert("No se pudo actualizar el estado en el servidor");
+        }
+    } catch (error) {
+        console.error("Error de conexión:", error);
+    }
+}
+
+function getClaseEstado(estado) {
+    if (estado === "En Espera") return "estado-espera";
+    if (estado === "En Proceso") return "estado-proceso";
+    if (estado === "Terminado") return "estado-terminado";
+    return "";
+}

@@ -3,7 +3,8 @@ using GestorMotosAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace GestorMotosAPI.Controllers
-{   [ApiController]
+{
+    [ApiController]
     [Route("api/[controller]")]
     public class OrdenesTrabajoController : ControllerBase 
     {
@@ -54,6 +55,32 @@ namespace GestorMotosAPI.Controllers
             _context.SaveChanges();
 
             return Ok($"Orden de trabajo {id} eliminada correctamente.");
+    
         }
+        [HttpPatch("{id}/estado")]
+        public async Task<IActionResult> ActualizarEstado(int id, [FromBody] string nuevoEstado)
+        {
+            var orden = await _context.OrdenesTrabajo.FindAsync(id);
+
+            if (orden == null)
+            {
+                return NotFound(); 
+            }
+            orden.Estado = nuevoEstado;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error al guardar en la base de datos");
+            }
+            return NoContent(); // Todo OK (204)
+        }
+
+
     }
+
+        
 }
