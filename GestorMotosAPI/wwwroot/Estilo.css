@@ -1,6 +1,4 @@
-/* ==========================================
-   1. BASE Y RESET
-   ========================================== */
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -14,9 +12,7 @@ body {
     padding: 20px;
 }
 
-/* ==========================================
-   2. NAVBAR
-   ========================================== */
+
 .navbar {
     display: flex;
     justify-content: center;
@@ -44,9 +40,6 @@ body {
         box-shadow: 0 0 15px rgba(255, 102, 0, 0.8);
     }
 
-/* ==========================================
-   3. LAYOUT
-   ========================================== */
 .seccion-app, .seccion {
     display: flex;
     flex-direction: row;
@@ -74,9 +67,7 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* ==========================================
-   4. FORMULARIOS
-   ========================================== */
+
 fieldset {
     border: 2px solid #ff6600;
     border-radius: 10px;
@@ -133,9 +124,6 @@ textarea {
     margin-top: 10px;
 }
 
-/* ==========================================
-   5. TÍTULOS DE SECCIÓN
-   ========================================== */
 .panel-inventario h2,
 .columna-tabla h3,
 .columna-formulario h3 {
@@ -149,16 +137,14 @@ textarea {
     width: 100%;
 }
 
-/* ==========================================
-   6. TABLAS — UNIFICADAS
-   ========================================== */
+
 table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* ← CLAVE: fuerza que las columnas no se desajusten */
+    table-layout: fixed;
 }
 
-/* ENCABEZADOS */
+
 th {
     background-color: #2a2a2a;
     color: #ff6600;
@@ -169,44 +155,37 @@ th {
     vertical-align: middle;
 }
 
-/* CELDAS */
 td {
     padding: 16px 10px;
     border-bottom: 1px solid #333;
     color: white;
     text-align: center;
-    vertical-align: middle; /* ← alinea verticalmente el contenido */
+    vertical-align: middle; 
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-/* HOVER FILAS */
 tr:hover {
     background-color: #1f1f1f;
 }
 
-/* ==========================================
-   7. COLUMNA ACCIONES — FIX PRINCIPAL
-   ========================================== */
+
 th:last-child,
 td:last-child {
     text-align: center;
     white-space: nowrap;
-    width: 120px; /* ancho fijo para que no se comprima ni expanda */
+    width: 120px; 
     vertical-align: middle;
 }
 
-/* Hace que los botones dentro del td queden centrados y alineados */
 td:last-child {
-    display: table-cell; /* asegura que siga siendo celda */
+    display: table-cell;
     vertical-align: middle;
     padding: 10px;
 }
 
-/* ==========================================
-   8. BOTONES DE ACCIÓN
-   ========================================== */
+
 .btn-accion {
     display: inline-flex;
     justify-content: center;
@@ -219,7 +198,7 @@ td:last-child {
     cursor: pointer;
     font-size: 0.95rem;
     transition: transform 0.2s;
-    vertical-align: middle; /* ← alinea con otros botones inline */
+    vertical-align: middle; 
 }
 
 .btn-editar {
@@ -236,9 +215,6 @@ td:last-child {
     transform: scale(1.1);
 }
 
-/* ==========================================
-   9. ÓRDENES — LAYOUT COLUMNAS
-   ========================================== */
 .contenedor-columnas {
     display: flex;
     gap: 30px;
@@ -274,9 +250,7 @@ td:last-child {
         width: 100%;
     }
 
-/* ==========================================
-   10. NOTIFICACIONES
-   ========================================== */
+
 #notificacion {
     padding: 12px 20px;
     border-radius: 8px;
@@ -302,12 +276,26 @@ td:last-child {
 .estado-espera {
     border-left: 5px solid #ffa500;
 }
-/* Naranja */
+
 .estado-proceso {
     border-left: 5px solid #00bcff;
 }
-/* Azul */
+
 .estado-terminado {
     border-left: 5px solid #28a745;
 }
-/* Verde */
+
+
+.nav-btn.active, .btn-nav.active {
+    background-color: #ff6600 !important; 
+    color: white;
+    border: none;
+    box-shadow: 0 0 10px #ff6600, 0 0 25px #ff6600; 
+    transition: 0.3s;
+}
+
+
+.nav-btn:hover, .btn-nav:hover {
+    box-shadow: 0 0 8px #ff6600, 0 0 20px #ff6600;
+    transform: translateY(-2px); 
+}

@@ -141,12 +141,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     btnOrdenes.addEventListener("click", () => {
-
-        mostrarSeccion("seccion-ordenes", document.getElementById("btn-motos"));
-
-        cargarOrdenes(); // Cargamos la tabla
-
-        llenarSelectsOrden(); // Llenamos los menús desplegables
+        mostrarSeccion("seccion-ordenes", btnOrdenes);
+        cargarOrdenes();
+        llenarSelectsOrden();
 
     });
 
